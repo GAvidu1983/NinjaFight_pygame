@@ -15,10 +15,14 @@ pygame.init()
 class Hero:
     
     def __init__(self):
-        self.pic  = pygame.image.load("../Pictures/hero0_marche.png")
+        
+        self.pic  = pygame.image.load("../Pictures/hero0_static.png")
         self.pic = pygame.transform.scale(self.pic,(100,100))
         
-        self.pic_marche = self.pic.copy()
+        self.pic_static = self.pic.copy()
+        
+        self.pic_marche  = pygame.image.load("../Pictures/hero0_marche.png")
+        self.pic_marche = pygame.transform.scale(self.pic_marche,(100,100))
         
         self.pic_attack  = pygame.image.load("../Pictures/hero0_sabreattack.png")
         self.pic_attack = pygame.transform.scale(self.pic_attack,(100,100))
@@ -55,10 +59,12 @@ class Hero:
 class Arrows :
     
     def __init__(self):
-        self.list = []   # [[(startx,starty),(endx,endy),(istx,isty)],()...]
+        self.list = []   # [[(startx,starty),(endx,endy),(istx,isty),inc],()...]
         
         self.pic_bullet  = pygame.image.load("../Pictures/arrow.png")
         self.pic_bullet = pygame.transform.scale(self.pic_bullet,(100,15))
+        
+        self.step = 50
         
         
     def show(self,screen):
@@ -67,10 +73,10 @@ class Arrows :
             screen.blit(self.pic_bullet,arr[2])
             
     def add(self,start,end) :
-        self.list.append([start,end,start])
+        self.list.append([start,end,start,0])
         
     def increment(self) :
-        step = 50
+        step = self.step
         for arr in self.list :
             x0,y0 = arr[0]
             x1,y1 = arr[1]
@@ -78,6 +84,10 @@ class Arrows :
             dy = (y1-y0) /step
             x,y = arr[2]
             arr[2] = (x+dx,y+dy)
+            arr[3] += 1
+            if arr[3] >= self.step :
+                self.list.pop()
+                
 
             
         
@@ -121,6 +131,10 @@ while running:
             running = False
             
         if event.type == pygame.KEYDOWN:
+            
+            if event.key in [pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN] :
+                Hero1.pic = Hero1.pic_marche
+            
             if event.key == pygame.K_LEFT:
                 Hero1.posx -= 10
             if event.key == pygame.K_RIGHT:
@@ -151,8 +165,8 @@ while running:
                 Arrowl.add(Hero1.pos,Hero1.target)
             
         if event.type == pygame.KEYUP:
-            if event.key in [ pygame.K_RETURN,pygame.K_d,pygame.K_a ]:
-                Hero1.pic = Hero1.pic_marche
+            if event.key in [ pygame.K_RETURN,pygame.K_d,pygame.K_a,pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN ]:
+                Hero1.pic = Hero1.pic_static
                 
         
         if event.type == pygame.MOUSEBUTTONDOWN :
