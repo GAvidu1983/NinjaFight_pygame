@@ -6,8 +6,72 @@
 
 import pygame
 import time
+import random
 
 pygame.init()
+
+
+
+#Hero class
+
+class Mechant:
+    
+    def __init__(self):
+        
+        self.pic  = pygame.image.load("../Pictures/mechant0_marche.png")
+        self.pic = pygame.transform.scale(self.pic,(100,100))
+        
+        self.pic_static = self.pic.copy()
+        
+        self.pic_marche  = pygame.image.load("../Pictures/mechant0_marche.png")
+        self.pic_marche = pygame.transform.scale(self.pic_marche,(100,100))
+        
+        self.pic_attack  = pygame.image.load("../Pictures/mechant0_sabreattack.png")
+        self.pic_attack = pygame.transform.scale(self.pic_attack,(100,100))
+        
+        self.pic_sdefence  = pygame.image.load("../Pictures/mechant0_sabredefence.png")
+        self.pic_sdefence = pygame.transform.scale(self.pic_sdefence,(100,100))
+        
+        self.pic_arrow  = pygame.image.load("../Pictures/hero0_arrow.png")
+        self.pic_arrow = pygame.transform.scale(self.pic_arrow,(100,140))
+        
+        self.pic_jump  = pygame.image.load("../Pictures/hero0_jump.png")
+        self.pic_jump = pygame.transform.scale(self.pic_jump,(100,150))
+        
+        self.pic_shuriken  = pygame.image.load("../Pictures/hero0_shuriken.png")
+        self.pic_shuriken = pygame.transform.scale(self.pic_shuriken,(100,100))
+        
+        self.pic_shield  = pygame.image.load("../Pictures/hero0_shield.png")
+        self.pic_shield = pygame.transform.scale(self.pic_shield,(100,100))
+        
+        self.posx = 300
+        self.posy = 400
+        
+        self.pos = (self.posx,self.posy)
+        
+        self.target_x = 640
+        self.target_y = 360
+        
+        self.target = (self.target_x,self.target_y)
+        
+    def show(self,screen) :
+        screen.blit(self.pic,(self.posx,self.posy))
+        
+    def update(self) :
+        rx = random.randrange(-20,20,2)
+        ry = random.randrange(-20,20,2)
+        mv = random.randrange(0,10,1)
+        if mv > 4 :
+            self.posx = self.posx + rx
+            self.posy = self.posy + ry
+        if self.posx > 800 : self.posx = 800
+        if self.posx < 200 : self.posx = 200
+        if self.posy > 600 : self.posy = 600
+        if self.posy < 200 : self.posy = 200
+        
+        self.pos = (self.posx ,self.posy)
+        self.target = (self.target_x,self.target_y)
+
 
 
 #Hero class
@@ -92,7 +156,7 @@ class Arrows :
             arr[2] = (x+dx,y+dy)
             arr[3] += 1
             if arr[3] >= self.step :
-                self.list.pop()
+                self.list.remove(arr)
                 
 
 class Shuriken :
@@ -124,7 +188,7 @@ class Shuriken :
             arr[2] = (x+dx,y+dy)
             arr[3] += 1
             if arr[3] >= self.step :
-                self.list.pop()
+                self.list.remove(arr)
                 
 
             
@@ -136,6 +200,8 @@ class Shuriken :
 Hero1  = Hero()
 Arrowl = Arrows()
 Shurikenl = Shuriken()
+
+Mechant1 = Mechant()
 
 # Set up the background window and Characters
 bg = pygame.image.load("../Pictures/paysage0.png")
@@ -238,6 +304,10 @@ while running:
     Hero1.show(screen)
     Arrowl.show(screen)
     Shurikenl.show(screen)
+    
+    
+    Mechant1.update()
+    Mechant1.show(screen)
 
 
     # Flip the display
