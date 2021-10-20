@@ -116,8 +116,12 @@ class Hero:
         
         self.target = (self.target_x,self.target_y)
         
+        
+        self.lifepoints = 100
+        
     def show(self,screen) :
         screen.blit(self.pic,(self.posx,self.posy))
+        pygame.draw.line(screen,(0,255,0),(self.posx,self.posy),(self.posx + self.lifepoints,self.posy),width = 5)
         
     def update(self) :
         self.pos = (self.posx,self.posy)
@@ -150,8 +154,8 @@ class Arrows :
         for arr in self.list :
             x0,y0 = arr[0]
             x1,y1 = arr[1]
-            dx = (x1-x0)/step
-            dy = (y1-y0) /step
+            dx = (x1-x0)/self.step
+            dy = (y1-y0) /self.step
             x,y = arr[2]
             arr[2] = (x+dx,y+dy)
             arr[3] += 1
